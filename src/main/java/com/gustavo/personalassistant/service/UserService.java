@@ -1,6 +1,6 @@
 package com.gustavo.personalassistant.service;
 
-import com.gustavo.personalassistant.dto.UserRegistrationDto;
+import com.gustavo.personalassistant.dto.userDto.UserRegistrationDto;
 import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.model.user.UserRoles;
 import com.gustavo.personalassistant.repository.UserRepository;

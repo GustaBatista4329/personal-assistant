@@ -1,4 +1,4 @@
-package com.gustavo.personalassistant.dto;
+package com.gustavo.personalassistant.dto.userDto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

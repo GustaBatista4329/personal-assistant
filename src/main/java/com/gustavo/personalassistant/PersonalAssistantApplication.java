@@ -1,15 +1,7 @@
 package com.gustavo.personalassistant;
 
-import com.gustavo.personalassistant.dto.UserRegistrationDto;
-import com.gustavo.personalassistant.repository.UserRepository;
-import com.gustavo.personalassistant.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 @SpringBootApplication
 public class PersonalAssistantApplication {

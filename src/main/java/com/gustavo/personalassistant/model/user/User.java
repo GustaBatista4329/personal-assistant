@@ -1,6 +1,6 @@
 package com.gustavo.personalassistant.model.user;
 
-import com.gustavo.personalassistant.dto.UserRegistrationDto;
+import com.gustavo.personalassistant.dto.userDto.UserRegistrationDto;
 import com.gustavo.personalassistant.model.transactions.expense.Expense;
 import com.gustavo.personalassistant.model.transactions.income.Income;
 import jakarta.persistence.*;

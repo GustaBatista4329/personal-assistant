@@ -1,6 +1,6 @@
 package com.gustavo.personalassistant.controller;
 
-import com.gustavo.personalassistant.dto.UserRegistrationDto;
+import com.gustavo.personalassistant.dto.userDto.UserRegistrationDto;
 import com.gustavo.personalassistant.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
