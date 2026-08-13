@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/gusta/OneDrive/Desktop/AGENDA/**)",
+      "Bash(mv agenda *)",
+      "PowerShell(Rename-Item *)",
+      "PowerShell(Get-Process *)",
+      "PowerShell(Stop-Process *)",
+      "Bash(tasklist)"
+    ]
+  }
+}
