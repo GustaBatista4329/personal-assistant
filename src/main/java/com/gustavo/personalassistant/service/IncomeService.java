@@ -1,6 +1,6 @@
 package com.gustavo.personalassistant.service;
 
-import com.gustavo.personalassistant.dto.IncomeDto.RegisterIncomeDto;
+import com.gustavo.personalassistant.dto.IncomeDto.IncomeRegisterDto;
 import com.gustavo.personalassistant.model.transactions.income.Income;
 import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.repository.IncomeRepository;
@@ -15,13 +15,13 @@ public class IncomeService {
     final private IncomeRepository incomeRepository;
     final private UserRepository userRepository;
 
-    public RegisterIncomeDto registerIncome(RegisterIncomeDto dto){
+    public Income registerIncome(IncomeRegisterDto dto){
         User user = userRepository.findById(dto.userId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found!"));
 
         Income newIncome = new Income(dto, user);
 
         incomeRepository.save(newIncome);
-        return dto;
+        return newIncome;
     }
 }

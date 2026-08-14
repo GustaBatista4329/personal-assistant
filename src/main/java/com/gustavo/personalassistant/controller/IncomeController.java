@@ -1,6 +1,8 @@
 package com.gustavo.personalassistant.controller;
 
-import com.gustavo.personalassistant.dto.IncomeDto.RegisterIncomeDto;
+import com.gustavo.personalassistant.dto.IncomeDto.IncomeRegisterDto;
+import com.gustavo.personalassistant.dto.IncomeDto.IncomeResponseDto;
+import com.gustavo.personalassistant.model.transactions.income.Income;
 import com.gustavo.personalassistant.service.IncomeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,18 +19,19 @@ public class IncomeController {
     final private IncomeService incomeService;
 
     @PostMapping
-    public ResponseEntity<RegisterIncomeDto> registerIncome(
-            @RequestBody @Valid RegisterIncomeDto registerIncomeDto,
+    public ResponseEntity<IncomeResponseDto> registerIncome(
+            @RequestBody @Valid IncomeRegisterDto incomeRegisterDto,
             @RequestHeader(name = "idempotency-key", required = false) String idempotencyKey,
             UriComponentsBuilder uriBuilder
             ){
 
-        RegisterIncomeDto registerIncome = incomeService.registerIncome(registerIncomeDto);
+        Income registerIncome = incomeService.registerIncome(incomeRegisterDto);
+        IncomeResponseDto incomeResponse = new IncomeResponseDto(registerIncome);
 
         URI location = uriBuilder.path("/api/income/{uuid}")
-                .buildAndExpand(registerIncome.userId())
+                .buildAndExpand(incomeResponse.incomeId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(registerIncome);
+        return ResponseEntity.created(location).body(incomeResponse);
     }
 }

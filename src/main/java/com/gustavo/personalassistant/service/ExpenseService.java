@@ -1,6 +1,6 @@
 package com.gustavo.personalassistant.service;
 
-import com.gustavo.personalassistant.dto.expenseDto.RecordExpenseDto;
+import com.gustavo.personalassistant.dto.expenseDto.ExpenseRecordDto;
 import com.gustavo.personalassistant.model.transactions.expense.Expense;
 import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.repository.ExpenseRepository;
@@ -14,12 +14,13 @@ public class ExpenseService {
     final private ExpenseRepository expenseRepository;
     final private UserRepository    userRepository;
 
-    public RecordExpenseDto recordExpense(RecordExpenseDto dto) {
+    public Expense recordExpense(ExpenseRecordDto dto) {
         User user = userRepository.findById(dto.userId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found!"));
 
         Expense newExpense = new Expense(dto, user);
         expenseRepository.save(newExpense);
-        return dto;
+        return newExpense;
     }
+
 }

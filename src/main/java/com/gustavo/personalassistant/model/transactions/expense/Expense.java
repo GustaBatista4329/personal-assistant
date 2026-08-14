@@ -1,6 +1,6 @@
 package com.gustavo.personalassistant.model.transactions.expense;
 
-import com.gustavo.personalassistant.dto.expenseDto.RecordExpenseDto;
+import com.gustavo.personalassistant.dto.expenseDto.ExpenseRecordDto;
 import com.gustavo.personalassistant.model.transactions.Finance;
 import com.gustavo.personalassistant.model.user.User;
 import jakarta.persistence.*;
@@ -29,7 +29,7 @@ public class Expense extends Finance {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Expense(RecordExpenseDto dto, User user) {
+    public Expense(ExpenseRecordDto dto, User user) {
         this.setName(dto.name());
         this.setMoney(dto.money());
         this.setTransactionDate(dto.transactionDate());

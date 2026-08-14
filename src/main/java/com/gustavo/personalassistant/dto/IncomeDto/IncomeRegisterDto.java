@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record RegisterIncomeDto(
+public record IncomeRegisterDto(
         @NotBlank(message = "Name field cannot be null") String name,
         @NotNull(message = "Money field cannot be null") @Positive(message = "Value must be positive") BigDecimal money,
         @NotNull(message = "Transaction field field cannot be null") LocalDate transactionDate,
