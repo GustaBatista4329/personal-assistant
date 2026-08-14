@@ -22,7 +22,8 @@ public abstract class Finance {
     private LocalDate TransactionDate;
 
 
-    protected Finance(){}
+    protected Finance() {
+    }
 
     public UUID getFinanceId() {
         return financeId;

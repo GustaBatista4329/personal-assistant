@@ -12,7 +12,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "expenses")
 @AttributeOverride(name = "financeId", column = @Column(name = "expense_id"))
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Expense extends Finance {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -26,7 +29,7 @@ public class Expense extends Finance {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Expense(RecordExpenseDto dto, User user){
+    public Expense(RecordExpenseDto dto, User user) {
         this.setName(dto.name());
         this.setMoney(dto.money());
         this.setTransactionDate(dto.transactionDate());

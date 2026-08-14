@@ -24,16 +24,16 @@ public class ExpenseController {
             @RequestBody @Valid RecordExpenseDto recordExpenseDto,
             @RequestHeader(name = "Idempotency-Key", required = false) String idempotencyKey,
             UriComponentsBuilder uriBuilder
-    ){
+    ) {
 
 
-        RecordExpenseDto newExpense = expenseService.recordExpense(recordExpenseDto);
+        RecordExpenseDto recordExpense = expenseService.recordExpense(recordExpenseDto);
 
-        URI location = uriBuilder.path("/api/expense/{name}")
-                .buildAndExpand(newExpense.name())
+        URI location = uriBuilder.path("/api/expense/{uuid}")
+                .buildAndExpand(recordExpense.userId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(newExpense);
+        return ResponseEntity.created(location).body(recordExpense);
     }
 
 }

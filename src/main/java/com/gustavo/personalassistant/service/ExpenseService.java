@@ -18,8 +18,8 @@ public class ExpenseService {
         User user = userRepository.findById(dto.userId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found!"));
 
-        Expense expense = new Expense(dto, user);
-        expenseRepository.save(expense);
+        Expense newExpense = new Expense(dto, user);
+        expenseRepository.save(newExpense);
         return dto;
     }
 }
