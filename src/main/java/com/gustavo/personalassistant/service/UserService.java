@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     final private UserRepository userRepository;
 
-    public UserRegistrationDto userRegistration(UserRegistrationDto dto){
+    public User userRegistration(UserRegistrationDto dto){
         if(userRepository.existsByEmail(dto.email())){
             System.out.println("This email address is already registered");
             throw new IllegalArgumentException("This email address is already registered");
@@ -22,6 +22,6 @@ public class UserService {
         user.setRole(UserRoles.USER);
 
         userRepository.save(user);
-        return dto;
+        return user;
     }
 }
