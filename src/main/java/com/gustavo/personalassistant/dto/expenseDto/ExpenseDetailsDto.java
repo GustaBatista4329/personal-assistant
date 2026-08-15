@@ -6,8 +6,10 @@ import com.gustavo.personalassistant.model.transactions.expense.PaymentMethods;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public record ExpenseDetailsDto(
+        UUID id,
         String name,
         BigDecimal money,
         LocalDate transactionDate,
@@ -16,7 +18,7 @@ public record ExpenseDetailsDto(
 ) {
 
     public ExpenseDetailsDto(Expense expense){
-        this(expense.getName(), expense.getMoney(), expense.getTransactionDate(), expense.getPaymentMethod(), expense.getCategory());
+        this(expense.getId(),expense.getName(), expense.getMoney(), expense.getTransactionDate(), expense.getPaymentMethod(), expense.getCategory());
     }
 
 }

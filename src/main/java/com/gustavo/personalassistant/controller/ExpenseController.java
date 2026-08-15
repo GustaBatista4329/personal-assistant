@@ -40,13 +40,27 @@ public class ExpenseController {
         return ResponseEntity.created(location).body(expenseResponse);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/list/{userId}")
     public ResponseEntity<List<ExpenseDetailsDto>> listAllExpenses(@PathVariable UUID userId){
 
         List<ExpenseDetailsDto> expenseList = expenseService.listAllExpenses(userId);
 
         return ResponseEntity.ok().body(expenseList);
 
+    }
+
+    @GetMapping("/{expenseId}")
+    public ResponseEntity<ExpenseDetailsDto> findExpense(@PathVariable UUID expenseId){
+        ExpenseDetailsDto expenseDetails = expenseService.findExpense(expenseId);
+
+        return ResponseEntity.ok(expenseDetails);
+    }
+
+    @DeleteMapping("/{expenseId}")
+    public ResponseEntity<Void> deleteExpense(@PathVariable UUID expenseId){
+        expenseService.deleteExpense(expenseId);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

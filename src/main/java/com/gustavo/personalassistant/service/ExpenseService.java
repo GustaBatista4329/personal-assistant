@@ -2,6 +2,7 @@ package com.gustavo.personalassistant.service;
 
 import com.gustavo.personalassistant.dto.expenseDto.ExpenseDetailsDto;
 import com.gustavo.personalassistant.dto.expenseDto.ExpenseRecordDto;
+import com.gustavo.personalassistant.exception.NotFoundException;
 import com.gustavo.personalassistant.model.transactions.expense.Expense;
 import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.repository.ExpenseRepository;
@@ -42,4 +43,21 @@ public class ExpenseService {
         return expenseList;
     }
 
+    @Transactional(readOnly = true)
+    public ExpenseDetailsDto findExpense(UUID expenseId){
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(NotFoundException::expenseNotFound);
+
+        ExpenseDetailsDto expenseDetails = new ExpenseDetailsDto(expense);
+
+        return expenseDetails;
+    }
+
+    @Transactional
+    public void deleteExpense(UUID expenseId){
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(NotFoundException::expenseNotFound);
+
+        expenseRepository.delete(expense);
+    }
 }
