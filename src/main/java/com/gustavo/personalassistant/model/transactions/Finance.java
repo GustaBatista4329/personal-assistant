@@ -10,7 +10,7 @@ import java.util.UUID;
 public abstract class Finance {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID financeId;
+    private UUID id;
 
     @Column(nullable = false, length = 120)
     private String name;
@@ -25,12 +25,12 @@ public abstract class Finance {
     protected Finance() {
     }
 
-    public UUID getFinanceId() {
-        return financeId;
+    public UUID getId() {
+        return id;
     }
 
-    public void setFinanceId(UUID financeId) {
-        this.financeId = financeId;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getName() {

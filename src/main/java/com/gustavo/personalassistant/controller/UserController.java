@@ -31,7 +31,7 @@ public class UserController {
         UserResponseDto user = new UserResponseDto(newUser);
 
         URI location = uriBuilder.path("/api/user/users/{uuid}")
-                .buildAndExpand(newUser.getUserId())
+                .buildAndExpand(newUser.getId())
                 .toUri();
 
         return ResponseEntity.created(location).body(user);

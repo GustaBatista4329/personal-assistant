@@ -16,7 +16,7 @@ public record IncomeResponseDto(
 ) {
 
     public IncomeResponseDto(Income income){
-        this(income.getFinanceId(), income.getName(), income.getMoney(), income.getTransactionDate(), income.getCategory());
+        this(income.getId(), income.getName(), income.getMoney(), income.getTransactionDate(), income.getCategory());
     }
 
 }

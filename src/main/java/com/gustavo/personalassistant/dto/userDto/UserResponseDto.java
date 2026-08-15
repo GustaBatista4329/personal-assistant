@@ -14,7 +14,7 @@ public record UserResponseDto(
 ) {
 
     public UserResponseDto(User user){
-        this(user.getUserId(), user.getName(), user.getEmail(), user.getBirthdate(), user.getPhoneNumber());
+        this(user.getId(), user.getName(), user.getEmail(), user.getBirthdate(), user.getPhoneNumber());
     }
 
 }
