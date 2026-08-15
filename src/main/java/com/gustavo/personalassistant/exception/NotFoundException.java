@@ -13,4 +13,12 @@ public class NotFoundException extends RuntimeException{
     public static NotFoundException expenseNotFound() {
         return new NotFoundException("Expense not found!");
     }
+
+    public static NotFoundException incomeNotFound(){
+        return new NotFoundException("Income not found!");
+    }
+    public static NotFoundException userNotFound(){
+        return new NotFoundException("User not found!");
+    }
+
 }
