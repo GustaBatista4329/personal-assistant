@@ -7,5 +7,6 @@ public enum ExpenseCategories {
     DIGITAL_SERVICES,
     HOBBIES,
     TAX,
+    HEALTH,
     OTHERS;
 }
