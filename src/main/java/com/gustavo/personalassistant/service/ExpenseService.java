@@ -22,7 +22,7 @@ public class ExpenseService {
 
     public Expense recordExpense(ExpenseRecordDto dto) {
         User user = userRepository.findById(dto.userId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found!"));
+                .orElseThrow(NotFoundException::userNotFound);
 
         Expense newExpense = new Expense(dto, user);
         expenseRepository.save(newExpense);
@@ -32,15 +32,13 @@ public class ExpenseService {
     @Transactional(readOnly = true)
     public List<ExpenseDetailsDto> listAllExpenses(UUID userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found!"));
+                .orElseThrow(NotFoundException::userNotFound);
 
         List<Expense> expenses = expenseRepository.findByUserId(userId);
 
-        List<ExpenseDetailsDto> expenseList = expenses.stream()
+        return expenses.stream()
                 .map(ExpenseDetailsDto::new)
                 .toList();
-
-        return expenseList;
     }
 
     @Transactional(readOnly = true)
@@ -48,9 +46,7 @@ public class ExpenseService {
         Expense expense = expenseRepository.findById(expenseId)
                 .orElseThrow(NotFoundException::expenseNotFound);
 
-        ExpenseDetailsDto expenseDetails = new ExpenseDetailsDto(expense);
-
-        return expenseDetails;
+        return new ExpenseDetailsDto(expense);
     }
 
     @Transactional
