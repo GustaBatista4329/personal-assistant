@@ -19,7 +19,7 @@ public abstract class Finance {
     private BigDecimal money;
 
     @Column(nullable = false)
-    private LocalDate TransactionDate;
+    private LocalDate transactionDate;
 
 
     protected Finance() {
@@ -50,10 +50,10 @@ public abstract class Finance {
     }
 
     public LocalDate getTransactionDate() {
-        return TransactionDate;
+        return transactionDate;
     }
 
     public void setTransactionDate(LocalDate transactionDate) {
-        TransactionDate = transactionDate;
+        this.transactionDate = transactionDate;
     }
 }
