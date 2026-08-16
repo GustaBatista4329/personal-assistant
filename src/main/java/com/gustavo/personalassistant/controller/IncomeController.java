@@ -3,6 +3,7 @@ package com.gustavo.personalassistant.controller;
 import com.gustavo.personalassistant.dto.IncomeDto.IncomeRegisterDto;
 import com.gustavo.personalassistant.dto.IncomeDto.IncomeResponseDto;
 import com.gustavo.personalassistant.model.transactions.income.Income;
+import com.gustavo.personalassistant.model.transactions.income.IncomeCategories;
 import com.gustavo.personalassistant.service.IncomeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,19 +38,41 @@ public class IncomeController {
         return ResponseEntity.created(location).body(incomeResponse);
     }
 
-    @GetMapping("/list/{userId}")
-    public ResponseEntity<List<IncomeResponseDto>> listAllIncomes(@PathVariable UUID userId){
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<IncomeResponseDto>> listIncomes(
+            @PathVariable UUID userId,
+            @RequestParam(required = false) String month,
+            @RequestParam(required = false) Integer year){
+
+        if(month != null && year != null){
+            List<IncomeResponseDto> incomeRegisterResponse = incomeService
+                    .findIncomeByMonthAndYear(userId, month.toUpperCase(), year);
+
+            return ResponseEntity.ok(incomeRegisterResponse);
+        }
+
         List<IncomeResponseDto> incomeRegisterResponse = incomeService.listAllIncomes(userId);
 
         return ResponseEntity.ok(incomeRegisterResponse);
     }
 
     @GetMapping("/{incomeId}")
-    public ResponseEntity<IncomeResponseDto> findIncome(@PathVariable UUID incomeId){
-        IncomeResponseDto incomeResponse = incomeService.findIncome(incomeId);
+    public ResponseEntity<IncomeResponseDto> findIncomeById(@PathVariable UUID incomeId){
+        IncomeResponseDto incomeResponse = incomeService.findIncomeById(incomeId);
 
         return ResponseEntity.ok(incomeResponse);
     }
+
+    @GetMapping
+    public ResponseEntity<List<IncomeResponseDto>> findIncomeByCategory(
+            @RequestParam(name = "category") String incomeCategory){
+
+        var incomeResponseList = incomeService
+                .findIncomeByCategory(IncomeCategories.valueOf(incomeCategory.toUpperCase()));
+
+        return ResponseEntity.ok(incomeResponseList);
+    }
+
 
     @DeleteMapping("/delete/{incomeId}")
     public ResponseEntity<Void> deleteIncome(@PathVariable UUID incomeId){
