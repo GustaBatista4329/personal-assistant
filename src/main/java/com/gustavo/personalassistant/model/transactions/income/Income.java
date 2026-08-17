@@ -1,6 +1,7 @@
 package com.gustavo.personalassistant.model.transactions.income;
 
 import com.gustavo.personalassistant.dto.IncomeDto.IncomeRegisterDto;
+import com.gustavo.personalassistant.dto.IncomeDto.IncomeUpdateDto;
 import com.gustavo.personalassistant.model.transactions.Finance;
 import com.gustavo.personalassistant.model.user.User;
 import jakarta.persistence.*;
@@ -31,5 +32,21 @@ public class Income extends Finance {
         this.category = dto.category();
 
         this.user = user;
+    }
+
+
+    public void incomeUpdate(IncomeUpdateDto dto){
+        if (dto.name() != null) {
+            this.setName(dto.name());
+        }
+        if (dto.money() != null) {
+            this.setMoney(dto.money());
+        }
+        if (dto.transactionDate() != null) {
+            this.setTransactionDate(dto.transactionDate());
+        }
+        if (dto.category() != null) {
+            this.category = dto.category();
+        }
     }
 }

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record ExpenseRecordResponseDto(
+public record ExpenseResponseDto(
         UUID expenseId,
         String name,
         BigDecimal money,
@@ -16,7 +16,7 @@ public record ExpenseRecordResponseDto(
         PaymentMethods paymentMethod,
         ExpenseCategories expenseCategory
 ) {
-    public ExpenseRecordResponseDto(Expense expense) {
+    public ExpenseResponseDto(Expense expense) {
         this(expense.getId(), expense.getName(), expense.getMoney(), expense.getTransactionDate(),
                 expense.getPaymentMethod(), expense.getCategory());
     }

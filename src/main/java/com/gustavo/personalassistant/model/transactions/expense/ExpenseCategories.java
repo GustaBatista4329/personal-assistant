@@ -8,5 +8,7 @@ public enum ExpenseCategories {
     HOBBIES,
     TAX,
     HEALTH,
+    HOUSING,
+    ENTERTAINMENT,
     OTHERS;
 }

@@ -7,5 +7,6 @@ public enum IncomeCategories {
     INVESTMENTS,
     SALE,
     GIFT,
+    BONUS,
     OTHERS;
 }

@@ -1,9 +1,11 @@
 package com.gustavo.personalassistant.service;
 
-import com.gustavo.personalassistant.dto.expenseDto.ExpenseDetailsDto;
 import com.gustavo.personalassistant.dto.expenseDto.ExpenseRecordDto;
+import com.gustavo.personalassistant.dto.expenseDto.ExpenseResponseDto;
 import com.gustavo.personalassistant.exception.NotFoundException;
 import com.gustavo.personalassistant.model.transactions.expense.Expense;
+import com.gustavo.personalassistant.model.transactions.expense.ExpenseCategories;
+import com.gustavo.personalassistant.model.transactions.expense.PaymentMethods;
 import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.repository.ExpenseRepository;
 import com.gustavo.personalassistant.repository.UserRepository;
@@ -30,23 +32,60 @@ public class ExpenseService {
     }
 
     @Transactional(readOnly = true)
-    public List<ExpenseDetailsDto> listAllExpenses(UUID userId) {
+    public List<ExpenseResponseDto> listExpenses(UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(NotFoundException::userNotFound);
 
         List<Expense> expenses = expenseRepository.findByUserId(userId);
 
         return expenses.stream()
-                .map(ExpenseDetailsDto::new)
+                .map(ExpenseResponseDto::new)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public ExpenseDetailsDto findExpense(UUID expenseId){
+    public ExpenseResponseDto findExpense(UUID expenseId){
         Expense expense = expenseRepository.findById(expenseId)
                 .orElseThrow(NotFoundException::expenseNotFound);
 
-        return new ExpenseDetailsDto(expense);
+        return new ExpenseResponseDto(expense);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ExpenseResponseDto> findByCategory(ExpenseCategories category, UUID userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(NotFoundException::userNotFound);
+
+        var expenseList = expenseRepository.findByCategoryAndUserId(category, userId);
+
+        return expenseList.stream()
+                .map(ExpenseResponseDto::new)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ExpenseResponseDto> findByPaymentMethod(PaymentMethods paymentMethods, UUID userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(NotFoundException::userNotFound);
+
+        var expenseList = expenseRepository.findByPaymentMethodAndUserId(paymentMethods, userId);
+
+        return expenseList.stream()
+                .map(ExpenseResponseDto::new)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ExpenseResponseDto> findByPaymentMethodAndCategory(
+            PaymentMethods paymentMethods, ExpenseCategories category, UUID userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(NotFoundException::userNotFound);
+
+        var expenseList = expenseRepository.findByPaymentMethodAndCategoryAndUserId(paymentMethods, category, userId);
+
+        return expenseList.stream()
+                .map(ExpenseResponseDto::new)
+                .toList();
     }
 
     @Transactional

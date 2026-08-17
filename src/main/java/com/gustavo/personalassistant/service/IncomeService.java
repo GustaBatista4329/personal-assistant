@@ -2,6 +2,7 @@ package com.gustavo.personalassistant.service;
 
 import com.gustavo.personalassistant.dto.IncomeDto.IncomeRegisterDto;
 import com.gustavo.personalassistant.dto.IncomeDto.IncomeResponseDto;
+import com.gustavo.personalassistant.dto.IncomeDto.IncomeUpdateDto;
 import com.gustavo.personalassistant.exception.NotFoundException;
 import com.gustavo.personalassistant.model.transactions.income.Income;
 import com.gustavo.personalassistant.model.transactions.income.IncomeCategories;
@@ -55,9 +56,11 @@ public class IncomeService {
     }
 
     @Transactional(readOnly = true)
-    public List<IncomeResponseDto> findIncomeByCategory(IncomeCategories incomeCategory){
-        var incomes = incomeRepository.findByCategory(incomeCategory);
+    public List<IncomeResponseDto> findIncomeByCategory(IncomeCategories incomeCategory, UUID userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(NotFoundException::userNotFound);
 
+        var incomes = incomeRepository.findByCategoryAndUserId(incomeCategory, userId);
 
         return incomes.stream()
                 .map(IncomeResponseDto::new)
@@ -94,6 +97,28 @@ public class IncomeService {
         return incomeList.stream()
                 .map(IncomeResponseDto::new)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<IncomeResponseDto> findIncomeByName(UUID userId, String name){
+        User user = userRepository.findById(userId)
+                .orElseThrow(NotFoundException::userNotFound);
+
+        var incomeList = incomeRepository.findByUserIdAndNameContains(userId, name);
+
+        return incomeList.stream()
+                .map(IncomeResponseDto::new)
+                .toList();
+    }
+
+    @Transactional
+    public IncomeResponseDto updateIncome(UUID incomeId, IncomeUpdateDto updateDto){
+        Income income = incomeRepository.findById(incomeId)
+                .orElseThrow(NotFoundException::incomeNotFound);
+
+        income.incomeUpdate(updateDto);
+
+        return new IncomeResponseDto(income);
     }
 
     @Transactional
