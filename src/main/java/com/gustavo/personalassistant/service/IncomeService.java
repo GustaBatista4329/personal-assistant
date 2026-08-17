@@ -9,8 +9,10 @@ import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.repository.IncomeRepository;
 import com.gustavo.personalassistant.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Month;
 import java.util.List;
@@ -70,6 +72,24 @@ public class IncomeService {
         var selectedMonth = Month.valueOf(month).getValue();
 
         List<Income> incomeList = incomeRepository.findByMonthAndYear(userId, selectedMonth, year);
+
+        return incomeList.stream()
+                .map(IncomeResponseDto::new)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<IncomeResponseDto>findIncomeByDate(UUID userId, String month, Integer year, int day){
+        User user = userRepository.findById(userId)
+                .orElseThrow(NotFoundException::userNotFound);
+
+        var selectedMonth = Month.valueOf(month).getValue();
+
+        if(day > 31 || day <= 0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The day must be less than 31 and greater than 0!");
+        }
+
+        List<Income> incomeList = incomeRepository.findByDate(userId, selectedMonth, year, day);
 
         return incomeList.stream()
                 .map(IncomeResponseDto::new)

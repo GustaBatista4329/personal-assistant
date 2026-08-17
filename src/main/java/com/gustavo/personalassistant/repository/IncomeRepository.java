@@ -21,4 +21,12 @@ public interface IncomeRepository extends JpaRepository<Income, UUID> {
 
     @Query("SELECT e FROM Income e WHERE e.user.id = :userId AND MONTH(e.transactionDate) = :month AND YEAR(e.transactionDate) = :year")
     List<Income> findByMonthAndYear(@Param("userId") UUID userId, @Param("month") int month, @Param("year") Integer year);
+
+    @Query("SELECT e FROM Income e WHERE e.user.id = :userId AND MONTH(e.transactionDate) = :month " +
+            "AND YEAR(e.transactionDate) = :year AND DAY(e.transactionDate) = :day")
+    List<Income> findByDate(
+            @Param("userId") UUID userId,
+            @Param("month") int month,
+            @Param("year") Integer year,
+            @Param("day") int day);
 }

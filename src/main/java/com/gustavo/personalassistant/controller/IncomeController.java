@@ -42,18 +42,20 @@ public class IncomeController {
     public ResponseEntity<List<IncomeResponseDto>> listIncomes(
             @PathVariable UUID userId,
             @RequestParam(required = false) String month,
-            @RequestParam(required = false) Integer year){
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer day){
 
-        if(month != null && year != null){
-            List<IncomeResponseDto> incomeRegisterResponse = incomeService
-                    .findIncomeByMonthAndYear(userId, month.toUpperCase(), year);
-
-            return ResponseEntity.ok(incomeRegisterResponse);
+        if(month != null && year != null && day != null){
+            return ResponseEntity.ok(incomeService
+                    .findIncomeByDate(userId, month.toUpperCase(), year, day));
         }
 
-        List<IncomeResponseDto> incomeRegisterResponse = incomeService.listAllIncomes(userId);
+        if(month != null && year != null){
+            return ResponseEntity.ok(incomeService
+                    .findIncomeByMonthAndYear(userId, month.toUpperCase(), year));
+        }
 
-        return ResponseEntity.ok(incomeRegisterResponse);
+        return ResponseEntity.ok(incomeService.listAllIncomes(userId));
     }
 
     @GetMapping("/{incomeId}")
