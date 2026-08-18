@@ -2,6 +2,7 @@ package com.gustavo.personalassistant.controller;
 
 import com.gustavo.personalassistant.dto.expenseDto.ExpenseResponseDto;
 import com.gustavo.personalassistant.dto.expenseDto.ExpenseRecordDto;
+import com.gustavo.personalassistant.dto.expenseDto.ExpenseUpdateDto;
 import com.gustavo.personalassistant.model.transactions.expense.Expense;
 import com.gustavo.personalassistant.model.transactions.expense.ExpenseCategories;
 import com.gustavo.personalassistant.model.transactions.expense.PaymentMethods;
@@ -44,40 +45,39 @@ public class ExpenseController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ExpenseResponseDto>> listExpenses(
             @PathVariable UUID userId,
-            @RequestParam(name = "category",required = false)ExpenseCategories expenseCategory,
-            @RequestParam(name = "payment-method", required = false)PaymentMethods paymentMethod
-            ){
+            @RequestParam(name = "category", required = false) ExpenseCategories expenseCategory,
+            @RequestParam(name = "payment-method", required = false) PaymentMethods paymentMethod,
+            @RequestParam(required = false) String month,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer day
+    ) {
 
-        if(expenseCategory != null && paymentMethod != null){
-            return ResponseEntity.ok(
-                    expenseService.findByPaymentMethodAndCategory(paymentMethod, expenseCategory, userId));
-        }
-
-        if(expenseCategory != null ){
-            return ResponseEntity.ok(
-                    expenseService.findByCategory(expenseCategory, userId));
-        }
-
-        if(paymentMethod != null){
-            return ResponseEntity.ok(
-                    expenseService.findByPaymentMethod(paymentMethod, userId));
-        }
-
-        List<ExpenseResponseDto> expenseList = expenseService.listExpenses(userId);
+        List<ExpenseResponseDto> expenseList = expenseService.listDynamicExpenses(
+                userId, expenseCategory, paymentMethod, month, year, day);
 
         return ResponseEntity.ok().body(expenseList);
 
     }
 
     @GetMapping("/{expenseId}")
-    public ResponseEntity<ExpenseResponseDto> findExpense(@PathVariable UUID expenseId){
+    public ResponseEntity<ExpenseResponseDto> findExpense(@PathVariable UUID expenseId) {
         ExpenseResponseDto expenseDetails = expenseService.findExpense(expenseId);
 
         return ResponseEntity.ok(expenseDetails);
     }
 
+    @PatchMapping("/{expenseId}")
+    public ResponseEntity<ExpenseResponseDto> updateExpense(
+            @PathVariable UUID expenseId,
+            @RequestBody @Valid ExpenseUpdateDto dto
+            ){
+
+        return ResponseEntity.ok(expenseService.updateExpense(expenseId, dto));
+
+    }
+
     @DeleteMapping("/delete/{expenseId}")
-    public ResponseEntity<Void> deleteExpense(@PathVariable UUID expenseId){
+    public ResponseEntity<Void> deleteExpense(@PathVariable UUID expenseId) {
         expenseService.deleteExpense(expenseId);
 
         return ResponseEntity.noContent().build();

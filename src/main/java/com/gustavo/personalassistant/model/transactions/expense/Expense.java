@@ -1,6 +1,7 @@
 package com.gustavo.personalassistant.model.transactions.expense;
 
 import com.gustavo.personalassistant.dto.expenseDto.ExpenseRecordDto;
+import com.gustavo.personalassistant.dto.expenseDto.ExpenseUpdateDto;
 import com.gustavo.personalassistant.model.transactions.Finance;
 import com.gustavo.personalassistant.model.user.User;
 import jakarta.persistence.*;
@@ -38,4 +39,23 @@ public class Expense extends Finance {
         this.category = dto.expenseCategory();
         this.user = user;
     }
+    public void updateExpense(ExpenseUpdateDto dto){
+        if (dto.name() != null) {
+            this.setName(dto.name());
+        }
+        if (dto.money() != null) {
+            this.setMoney(dto.money());
+        }
+        if (dto.transactionDate() != null) {
+            this.setTransactionDate(dto.transactionDate());
+        }
+        if (dto.expenseCategory() != null) {
+            this.category = dto.expenseCategory();
+        }
+
+        if(dto.paymentMethod() != null){
+            this.paymentMethod = dto.paymentMethod();
+        }
+    }
+
 }
