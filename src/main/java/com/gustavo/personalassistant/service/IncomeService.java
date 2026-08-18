@@ -7,15 +7,14 @@ import com.gustavo.personalassistant.exception.NotFoundException;
 import com.gustavo.personalassistant.model.transactions.income.Income;
 import com.gustavo.personalassistant.model.transactions.income.IncomeCategories;
 import com.gustavo.personalassistant.model.user.User;
-import com.gustavo.personalassistant.repository.IncomeRepository;
+import com.gustavo.personalassistant.repository.income.IncomeRepository;
 import com.gustavo.personalassistant.repository.UserRepository;
+import com.gustavo.personalassistant.repository.income.IncomeSpecification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Month;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,9 +23,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class IncomeService {
     final private IncomeRepository incomeRepository;
-    final private UserRepository userRepository;
+    final private UserRepository   userRepository;
 
-    public Income registerIncome(IncomeRegisterDto dto){
+    public Income registerIncome(IncomeRegisterDto dto) {
         User user = userRepository.findById(dto.userId())
                 .orElseThrow(NotFoundException::userNotFound);
 
@@ -37,30 +36,21 @@ public class IncomeService {
     }
 
     @Transactional(readOnly = true)
-    public List<IncomeResponseDto> listAllIncomes(UUID userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(NotFoundException::userNotFound);
+    public List<IncomeResponseDto> listDynamicIncomes(
+            UUID userId, IncomeCategories category,
+            String month, Integer year, Integer day
+    ) {
 
-        return incomeRepository.findByUserId(userId)
-                .stream()
-                .map(IncomeResponseDto::new)
-                .toList();
-    }
+        Integer monthNumber = null;
 
-    @Transactional(readOnly = true)
-    public IncomeResponseDto findIncomeById(UUID incomeId){
-        Income income = incomeRepository.findById(incomeId)
-                .orElseThrow(NotFoundException::incomeNotFound);
+        if (month != null && !month.trim().isEmpty()) {
+            monthNumber = java.time.Month.valueOf(month.toUpperCase()).getValue();
+        }
 
-        return new IncomeResponseDto(income);
-    }
+        Specification<Income> spec = IncomeSpecification.filterBy(
+                userId, category, monthNumber, year, day);
 
-    @Transactional(readOnly = true)
-    public List<IncomeResponseDto> findIncomeByCategory(IncomeCategories incomeCategory, UUID userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(NotFoundException::userNotFound);
-
-        var incomes = incomeRepository.findByCategoryAndUserId(incomeCategory, userId);
+        List<Income> incomes = incomeRepository.findAll(spec);
 
         return incomes.stream()
                 .map(IncomeResponseDto::new)
@@ -68,51 +58,16 @@ public class IncomeService {
     }
 
     @Transactional(readOnly = true)
-    public List<IncomeResponseDto> findIncomeByMonthAndYear(UUID userId, String month, Integer year){
-        User user = userRepository.findById(userId)
-                .orElseThrow(NotFoundException::userNotFound);
+    public IncomeResponseDto findIncomeById(UUID incomeId) {
+        Income income = incomeRepository.findById(incomeId)
+                .orElseThrow(NotFoundException::incomeNotFound);
 
-        var selectedMonth = Month.valueOf(month).getValue();
-
-        List<Income> incomeList = incomeRepository.findByMonthAndYear(userId, selectedMonth, year);
-
-        return incomeList.stream()
-                .map(IncomeResponseDto::new)
-                .toList();
+        return new IncomeResponseDto(income);
     }
 
-    @Transactional(readOnly = true)
-    public List<IncomeResponseDto>findIncomeByDate(UUID userId, String month, Integer year, int day){
-        User user = userRepository.findById(userId)
-                .orElseThrow(NotFoundException::userNotFound);
-
-        var selectedMonth = Month.valueOf(month).getValue();
-
-        if(day > 31 || day <= 0){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The day must be less than 31 and greater than 0!");
-        }
-
-        List<Income> incomeList = incomeRepository.findByDate(userId, selectedMonth, year, day);
-
-        return incomeList.stream()
-                .map(IncomeResponseDto::new)
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<IncomeResponseDto> findIncomeByName(UUID userId, String name){
-        User user = userRepository.findById(userId)
-                .orElseThrow(NotFoundException::userNotFound);
-
-        var incomeList = incomeRepository.findByUserIdAndNameContains(userId, name);
-
-        return incomeList.stream()
-                .map(IncomeResponseDto::new)
-                .toList();
-    }
 
     @Transactional
-    public IncomeResponseDto updateIncome(UUID incomeId, IncomeUpdateDto updateDto){
+    public IncomeResponseDto updateIncome(UUID incomeId, IncomeUpdateDto updateDto) {
         Income income = incomeRepository.findById(incomeId)
                 .orElseThrow(NotFoundException::incomeNotFound);
 
@@ -122,7 +77,7 @@ public class IncomeService {
     }
 
     @Transactional
-    public void deleteIncome(UUID incomeId){
+    public void deleteIncome(UUID incomeId) {
         Income income = incomeRepository.findById(incomeId)
                 .orElseThrow(NotFoundException::incomeNotFound);
 

@@ -48,28 +48,9 @@ public class IncomeController {
             @RequestParam(name = "category", required = false) IncomeCategories incomeCategory,
             @RequestParam(name = "name", required = false) String incomeName) {
 
-        if (month != null && year != null && day != null) {
-            return ResponseEntity.ok(incomeService
-                    .findIncomeByDate(userId, month.toUpperCase(), year, day));
-        }
+        List<IncomeResponseDto> incomeList = incomeService.listDynamicIncomes(userId, incomeCategory, month, year, day);
 
-        if (month != null && year != null) {
-            return ResponseEntity.ok(incomeService
-                    .findIncomeByMonthAndYear(userId, month.toUpperCase(), year));
-        }
-
-        if (incomeCategory != null) {
-            return ResponseEntity.ok(incomeService
-                    .findIncomeByCategory(incomeCategory, userId));
-        }
-
-        if (incomeName != null) {
-            return ResponseEntity.ok(
-                    incomeService.findIncomeByName(userId, incomeName)
-            );
-        }
-
-        return ResponseEntity.ok(incomeService.listAllIncomes(userId));
+        return ResponseEntity.ok(incomeList);
     }
 
     @GetMapping("/{incomeId}")
@@ -78,16 +59,6 @@ public class IncomeController {
 
         return ResponseEntity.ok(incomeResponse);
     }
-
-    /*@GetMapping
-    public ResponseEntity<List<IncomeResponseDto>> findIncomeByCategory(
-            @RequestParam(name = "category") IncomeCategories incomeCategory){
-
-        var incomeResponseList = incomeService
-                .findIncomeByCategory(incomeCategory);
-
-        return ResponseEntity.ok(incomeResponseList);
-    }*/
 
     @PatchMapping("/{incomeId}")
     public ResponseEntity<IncomeResponseDto> updateIncome(

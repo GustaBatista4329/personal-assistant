@@ -13,13 +13,7 @@ import java.util.UUID;
 
 public interface IncomeRepository extends JpaRepository<Income, UUID>, JpaSpecificationExecutor<Income> {
 
-    List<Income> findByUserId(UUID userId);
-
     Optional<Income> findById(UUID incomeId);
-
-    List<Income> findByCategoryAndUserId(IncomeCategories category, UUID userId);
-
-    List<Income> findByUserIdAndNameContains(UUID userId, String name);
 
     @Query("SELECT e FROM Income e WHERE e.user.id = :userId " +
             "AND MONTH(e.transactionDate) = :month AND YEAR(e.transactionDate) = :year")
