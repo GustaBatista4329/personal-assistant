@@ -36,7 +36,7 @@ public class ExpenseService {
 
     @Transactional(readOnly = true)
     public List<ExpenseResponseDto> listDynamicExpenses(
-            UUID userId, ExpenseCategories category, PaymentMethods paymentMethod,
+            UUID userId, String name, ExpenseCategories category, PaymentMethods paymentMethod,
             String month, Integer year, Integer day
     ) {
 
@@ -47,7 +47,7 @@ public class ExpenseService {
         }
 
         Specification<Expense> spec = ExpenseSpecification.filterBy(
-                userId, category, paymentMethod, monthNumber, year, day);
+                userId, name, category, paymentMethod, monthNumber, year, day);
 
         List<Expense> expenses = expenseRepository.findAll(spec);
 

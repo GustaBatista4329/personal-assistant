@@ -13,6 +13,7 @@ public class IncomeSpecification {
 
     public static Specification<Income> filterBy(
             UUID userId,
+            String name,
             IncomeCategories category,
             Integer month,
             Integer year,
@@ -22,6 +23,13 @@ public class IncomeSpecification {
             List<Predicate> predicates = new ArrayList<>();
 
             predicates.add(criteriaBuilder.equal(root.get("user").get("id"), userId));
+
+            if(name != null){
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")),
+                        "%" + name.toLowerCase() + "%"
+                ));
+            }
 
             if (category != null) {
                 predicates.add(criteriaBuilder.equal(root.get("category"), category));

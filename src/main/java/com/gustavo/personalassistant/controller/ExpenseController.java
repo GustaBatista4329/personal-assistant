@@ -45,6 +45,7 @@ public class ExpenseController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ExpenseResponseDto>> listExpenses(
             @PathVariable UUID userId,
+            @RequestParam(name = "name", required = false) String expenseName,
             @RequestParam(name = "category", required = false) ExpenseCategories expenseCategory,
             @RequestParam(name = "payment-method", required = false) PaymentMethods paymentMethod,
             @RequestParam(required = false) String month,
@@ -53,7 +54,7 @@ public class ExpenseController {
     ) {
 
         List<ExpenseResponseDto> expenseList = expenseService.listDynamicExpenses(
-                userId, expenseCategory, paymentMethod, month, year, day);
+                userId, expenseName, expenseCategory, paymentMethod, month, year, day);
 
         return ResponseEntity.ok().body(expenseList);
 

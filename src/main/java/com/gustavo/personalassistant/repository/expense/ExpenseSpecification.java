@@ -14,6 +14,7 @@ public class ExpenseSpecification {
 
     public static Specification<Expense> filterBy(
             UUID userId,
+            String name,
             ExpenseCategories category,
             PaymentMethods paymentMethod,
             Integer month,
@@ -24,6 +25,13 @@ public class ExpenseSpecification {
             List<Predicate> predicates = new ArrayList<>();
 
             predicates.add(criteriaBuilder.equal(root.get("user").get("id"), userId));
+
+            if(name != null){
+                predicates.add(criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")),
+                        "%" + name.toLowerCase() + "%"
+                ));
+            }
 
             if(category != null){
                 predicates.add(criteriaBuilder.equal(root.get("category"), category));

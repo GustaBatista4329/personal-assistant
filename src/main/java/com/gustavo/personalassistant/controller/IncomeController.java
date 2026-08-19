@@ -48,7 +48,7 @@ public class IncomeController {
             @RequestParam(name = "category", required = false) IncomeCategories incomeCategory,
             @RequestParam(name = "name", required = false) String incomeName) {
 
-        List<IncomeResponseDto> incomeList = incomeService.listDynamicIncomes(userId, incomeCategory, month, year, day);
+        List<IncomeResponseDto> incomeList = incomeService.listDynamicIncomes(userId, incomeName, incomeCategory, month, year, day);
 
         return ResponseEntity.ok(incomeList);
     }

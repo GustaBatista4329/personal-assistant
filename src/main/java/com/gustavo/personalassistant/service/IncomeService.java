@@ -37,7 +37,7 @@ public class IncomeService {
 
     @Transactional(readOnly = true)
     public List<IncomeResponseDto> listDynamicIncomes(
-            UUID userId, IncomeCategories category,
+            UUID userId, String name, IncomeCategories category,
             String month, Integer year, Integer day
     ) {
 
@@ -48,7 +48,7 @@ public class IncomeService {
         }
 
         Specification<Income> spec = IncomeSpecification.filterBy(
-                userId, category, monthNumber, year, day);
+                userId, name, category, monthNumber, year, day);
 
         List<Income> incomes = incomeRepository.findAll(spec);
 
