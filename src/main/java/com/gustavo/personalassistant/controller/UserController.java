@@ -2,6 +2,7 @@ package com.gustavo.personalassistant.controller;
 
 import com.gustavo.personalassistant.dto.userDto.UserRegistrationDto;
 import com.gustavo.personalassistant.dto.userDto.UserResponseDto;
+import com.gustavo.personalassistant.dto.userDto.UserUpdateDto;
 import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.service.UserService;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/user")
@@ -24,7 +26,7 @@ public class UserController {
             @RequestBody @Valid UserRegistrationDto userRegistration,
             @RequestHeader(name = "Idempotency-Key", required = false) String idempotencykey,
             UriComponentsBuilder uriBuilder
-    ){
+    ) {
 
         User newUser = userService.userRegistration(userRegistration);
 
@@ -35,6 +37,14 @@ public class UserController {
                 .toUri();
 
         return ResponseEntity.created(location).body(user);
+    }
+
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UserResponseDto> updateUser(
+            @PathVariable UUID userId,
+            @RequestBody @Valid UserUpdateDto dto) {
+
+        return ResponseEntity.ok(userService.updateUser(userId, dto));
     }
 
 }

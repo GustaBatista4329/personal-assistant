@@ -1,6 +1,7 @@
 package com.gustavo.personalassistant.model.user;
 
 import com.gustavo.personalassistant.dto.userDto.UserRegistrationDto;
+import com.gustavo.personalassistant.dto.userDto.UserUpdateDto;
 import com.gustavo.personalassistant.model.transactions.expense.Expense;
 import com.gustavo.personalassistant.model.transactions.income.Income;
 import jakarta.persistence.*;
@@ -45,20 +46,24 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses = new ArrayList<>();
 
-    public User(String name, LocalDate birthdate, String phoneNumber, String email, String password) {
-        this.name = name;
-        this.birthdate = birthdate;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.password = password;
-    }
-
     public User(UserRegistrationDto dto){
         this.name = dto.name();
         this.birthdate = dto.birthdate();
         this.phoneNumber = dto.phonenumber();
         this.email = dto.email();
         this.password = dto.password();
+    }
+
+    public void userUpdate(UserUpdateDto dto){
+        if(dto.name() != null){
+            this.name = dto.name();
+        }
+        if(dto.birthdate() != null){
+            this.birthdate = dto.birthdate();
+        }
+        if(dto.birthdate() != null){
+            this.phoneNumber = dto.phoneNumber();
+        }
     }
 
     public void setName(String name) {
