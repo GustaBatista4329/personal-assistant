@@ -1,4 +1,4 @@
-package com.gustavo.personalassistant.exception;
+package com.gustavo.personalassistant.infra.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

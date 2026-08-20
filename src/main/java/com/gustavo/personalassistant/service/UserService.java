@@ -3,7 +3,7 @@ package com.gustavo.personalassistant.service;
 import com.gustavo.personalassistant.dto.userDto.UserRegistrationDto;
 import com.gustavo.personalassistant.dto.userDto.UserResponseDto;
 import com.gustavo.personalassistant.dto.userDto.UserUpdateDto;
-import com.gustavo.personalassistant.exception.NotFoundException;
+import com.gustavo.personalassistant.infra.exception.NotFoundException;
 import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.model.user.UserRoles;
 import com.gustavo.personalassistant.repository.UserRepository;

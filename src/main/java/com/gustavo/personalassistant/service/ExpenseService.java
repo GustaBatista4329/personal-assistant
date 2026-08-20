@@ -3,7 +3,7 @@ package com.gustavo.personalassistant.service;
 import com.gustavo.personalassistant.dto.expenseDto.ExpenseRecordDto;
 import com.gustavo.personalassistant.dto.expenseDto.ExpenseResponseDto;
 import com.gustavo.personalassistant.dto.expenseDto.ExpenseUpdateDto;
-import com.gustavo.personalassistant.exception.NotFoundException;
+import com.gustavo.personalassistant.infra.exception.NotFoundException;
 import com.gustavo.personalassistant.model.transactions.expense.Expense;
 import com.gustavo.personalassistant.model.transactions.expense.ExpenseCategories;
 import com.gustavo.personalassistant.model.transactions.expense.PaymentMethods;
