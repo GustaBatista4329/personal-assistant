@@ -3,7 +3,7 @@ package com.gustavo.personalassistant.service;
 import com.gustavo.personalassistant.dto.IncomeDto.IncomeRegisterDto;
 import com.gustavo.personalassistant.dto.IncomeDto.IncomeResponseDto;
 import com.gustavo.personalassistant.dto.IncomeDto.IncomeUpdateDto;
-import com.gustavo.personalassistant.exception.NotFoundException;
+import com.gustavo.personalassistant.infra.exception.NotFoundException;
 import com.gustavo.personalassistant.model.transactions.income.Income;
 import com.gustavo.personalassistant.model.transactions.income.IncomeCategories;
 import com.gustavo.personalassistant.model.user.User;
@@ -31,8 +31,8 @@ public class IncomeService {
 
         Income newIncome = new Income(dto, user);
 
-        incomeRepository.save(newIncome);
-        return newIncome;
+
+        return incomeRepository.save(newIncome);
     }
 
     @Transactional(readOnly = true)
