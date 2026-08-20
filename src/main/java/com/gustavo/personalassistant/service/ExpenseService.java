@@ -30,8 +30,7 @@ public class ExpenseService {
                 .orElseThrow(NotFoundException::userNotFound);
 
         Expense newExpense = new Expense(dto, user);
-        expenseRepository.save(newExpense);
-        return newExpense;
+        return expenseRepository.save(newExpense);
     }
 
     @Transactional(readOnly = true)
