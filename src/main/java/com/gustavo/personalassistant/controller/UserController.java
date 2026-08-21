@@ -28,15 +28,13 @@ public class UserController {
             UriComponentsBuilder uriBuilder
     ) {
 
-        User newUser = userService.userRegistration(userRegistration);
-
-        UserResponseDto user = new UserResponseDto(newUser);
+        UserResponseDto newUser = userService.userRegistration(userRegistration);
 
         URI location = uriBuilder.path("/api/user/users/{uuid}")
-                .buildAndExpand(newUser.getId())
+                .buildAndExpand(newUser.userId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(user);
+        return ResponseEntity.created(location).body(newUser);
     }
 
     @PatchMapping("/{userId}")

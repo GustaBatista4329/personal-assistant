@@ -8,27 +8,36 @@ import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.model.user.UserRoles;
 import com.gustavo.personalassistant.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
-    final private UserRepository userRepository;
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Transactional
-    public User userRegistration(UserRegistrationDto dto){
+    public UserResponseDto userRegistration(UserRegistrationDto dto){
         if(userRepository.existsByEmail(dto.email())){
             throw new IllegalArgumentException("This email address is already registered");
         }
 
+        String hashedPassword = passwordEncoder.encode(dto.password());
         User user = new User(dto);
+        user.setPassword(hashedPassword);
         user.setRole(UserRoles.USER);
 
         userRepository.save(user);
-        return user;
+        return new UserResponseDto(user);
     }
 
     @Transactional
