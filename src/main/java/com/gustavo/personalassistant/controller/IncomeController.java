@@ -5,10 +5,12 @@ import com.gustavo.personalassistant.dto.IncomeDto.IncomeResponseDto;
 import com.gustavo.personalassistant.dto.IncomeDto.IncomeUpdateDto;
 import com.gustavo.personalassistant.model.transactions.income.Income;
 import com.gustavo.personalassistant.model.transactions.income.IncomeCategories;
+import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.service.IncomeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -26,10 +28,11 @@ public class IncomeController {
     public ResponseEntity<IncomeResponseDto> registerIncome(
             @RequestBody @Valid IncomeRegisterDto incomeRegisterDto,
             @RequestHeader(name = "idempotency-key", required = false) String idempotencyKey,
-            UriComponentsBuilder uriBuilder
+            UriComponentsBuilder uriBuilder,
+            @AuthenticationPrincipal User user
     ) {
 
-        Income            registerIncome = incomeService.registerIncome(incomeRegisterDto);
+        Income            registerIncome = incomeService.registerIncome(incomeRegisterDto, user.getId());
         IncomeResponseDto incomeResponse = new IncomeResponseDto(registerIncome);
 
         URI location = uriBuilder.path("/api/income/{uuid}")
@@ -39,23 +42,25 @@ public class IncomeController {
         return ResponseEntity.created(location).body(incomeResponse);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/list")
     public ResponseEntity<List<IncomeResponseDto>> listIncomes(
-            @PathVariable UUID userId,
             @RequestParam(required = false) String month,
             @RequestParam(required = false) Integer year,
             @RequestParam(required = false) Integer day,
             @RequestParam(name = "category", required = false) IncomeCategories incomeCategory,
-            @RequestParam(name = "name", required = false) String incomeName) {
+            @RequestParam(name = "name", required = false) String incomeName,
+            @AuthenticationPrincipal User user) {
 
-        List<IncomeResponseDto> incomeList = incomeService.listDynamicIncomes(userId, incomeName, incomeCategory, month, year, day);
+        List<IncomeResponseDto> incomeList = incomeService.listDynamicIncomes(user.getId(), incomeName, incomeCategory, month, year, day);
 
         return ResponseEntity.ok(incomeList);
     }
 
     @GetMapping("/{incomeId}")
-    public ResponseEntity<IncomeResponseDto> findIncomeById(@PathVariable UUID incomeId) {
-        IncomeResponseDto incomeResponse = incomeService.findIncomeById(incomeId);
+    public ResponseEntity<IncomeResponseDto> findIncomeById(
+            @PathVariable UUID incomeId,
+            @AuthenticationPrincipal User user) {
+        IncomeResponseDto incomeResponse = incomeService.findIncomeById(incomeId, user.getId());
 
         return ResponseEntity.ok(incomeResponse);
     }
@@ -63,15 +68,18 @@ public class IncomeController {
     @PatchMapping("/{incomeId}")
     public ResponseEntity<IncomeResponseDto> updateIncome(
             @PathVariable UUID incomeId,
-            @RequestBody @Valid IncomeUpdateDto dto
+            @RequestBody @Valid IncomeUpdateDto dto,
+            @AuthenticationPrincipal User user
     ) {
 
-        return ResponseEntity.ok(incomeService.updateIncome(incomeId, dto));
+        return ResponseEntity.ok(incomeService.updateIncome(incomeId, dto, user.getId()));
     }
 
     @DeleteMapping("/delete/{incomeId}")
-    public ResponseEntity<Void> deleteIncome(@PathVariable UUID incomeId) {
-        incomeService.deleteIncome(incomeId);
+    public ResponseEntity<Void> deleteIncome(
+            @PathVariable UUID incomeId,
+            @AuthenticationPrincipal User user) {
+        incomeService.deleteIncome(incomeId, user.getId());
 
         return ResponseEntity.noContent().build();
     }

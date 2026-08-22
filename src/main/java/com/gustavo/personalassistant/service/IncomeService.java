@@ -12,6 +12,7 @@ import com.gustavo.personalassistant.repository.UserRepository;
 import com.gustavo.personalassistant.repository.income.IncomeSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,8 @@ public class IncomeService {
     final private IncomeRepository incomeRepository;
     final private UserRepository   userRepository;
 
-    public Income registerIncome(IncomeRegisterDto dto) {
-        User user = userRepository.findById(dto.userId())
+    public Income registerIncome(IncomeRegisterDto dto, UUID userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(NotFoundException::userNotFound);
 
         Income newIncome = new Income(dto, user);
@@ -58,18 +59,27 @@ public class IncomeService {
     }
 
     @Transactional(readOnly = true)
-    public IncomeResponseDto findIncomeById(UUID incomeId) {
+    public IncomeResponseDto findIncomeById(UUID incomeId, UUID userId) {
         Income income = incomeRepository.findById(incomeId)
                 .orElseThrow(NotFoundException::incomeNotFound);
+
+        if(!income.getUser().getId().equals(userId)){
+            throw new AccessDeniedException("You dont have permission to do this");
+        }
 
         return new IncomeResponseDto(income);
     }
 
 
     @Transactional
-    public IncomeResponseDto updateIncome(UUID incomeId, IncomeUpdateDto updateDto) {
+    public IncomeResponseDto updateIncome(UUID incomeId, IncomeUpdateDto updateDto, UUID userId) {
         Income income = incomeRepository.findById(incomeId)
                 .orElseThrow(NotFoundException::incomeNotFound);
+
+        if(!income.getUser().getId().equals(userId)){
+            throw new AccessDeniedException("You dont have permission to do this");
+        }
+
 
         income.incomeUpdate(updateDto);
 
@@ -77,9 +87,13 @@ public class IncomeService {
     }
 
     @Transactional
-    public void deleteIncome(UUID incomeId) {
+    public void deleteIncome(UUID incomeId, UUID userId) {
         Income income = incomeRepository.findById(incomeId)
                 .orElseThrow(NotFoundException::incomeNotFound);
+
+        if(!income.getUser().getId().equals(userId)){
+            throw new AccessDeniedException("You dont have permission to do this");
+        }
 
         incomeRepository.delete(income);
     }

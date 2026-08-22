@@ -13,6 +13,7 @@ import com.gustavo.personalassistant.repository.expense.ExpenseSpecification;
 import com.gustavo.personalassistant.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,8 @@ public class ExpenseService {
     final private ExpenseRepository expenseRepository;
     final private UserRepository    userRepository;
 
-    public Expense recordExpense(ExpenseRecordDto dto) {
-        User user = userRepository.findById(dto.userId())
+    public Expense recordExpense(ExpenseRecordDto dto, UUID userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(NotFoundException::userNotFound);
 
         Expense newExpense = new Expense(dto, user);
@@ -57,17 +58,25 @@ public class ExpenseService {
 
 
     @Transactional(readOnly = true)
-    public ExpenseResponseDto findExpense(UUID expenseId) {
+    public ExpenseResponseDto findExpense(UUID expenseId, UUID userId) {
         Expense expense = expenseRepository.findById(expenseId)
                 .orElseThrow(NotFoundException::expenseNotFound);
+
+        if(!expense.getUser().getId().equals(userId)){
+            throw new AccessDeniedException("You dont have permission to do this");
+        }
 
         return new ExpenseResponseDto(expense);
     }
 
     @Transactional
-    public ExpenseResponseDto updateExpense(UUID expenseId, ExpenseUpdateDto expenseUpdate){
+    public ExpenseResponseDto updateExpense(UUID expenseId, ExpenseUpdateDto expenseUpdate, UUID userId){
         Expense expense = expenseRepository.findById(expenseId)
                 .orElseThrow(NotFoundException::expenseNotFound);
+
+        if(!expense.getUser().getId().equals(userId)){
+            throw new AccessDeniedException("You dont have permission to do this");
+        }
 
         expense.updateExpense(expenseUpdate);
 
@@ -75,9 +84,13 @@ public class ExpenseService {
     }
 
     @Transactional
-    public void deleteExpense(UUID expenseId) {
+    public void deleteExpense(UUID expenseId, UUID userId) {
         Expense expense = expenseRepository.findById(expenseId)
                 .orElseThrow(NotFoundException::expenseNotFound);
+
+        if(!expense.getUser().getId().equals(userId)){
+            throw new AccessDeniedException("You dont have permission to do this");
+        }
 
         expenseRepository.delete(expense);
     }

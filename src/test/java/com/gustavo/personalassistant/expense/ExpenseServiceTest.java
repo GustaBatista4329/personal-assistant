@@ -73,8 +73,7 @@ public class ExpenseServiceTest {
                 deliveryExpense.getMoney(),
                 deliveryExpense.getTransactionDate(),
                 deliveryExpense.getPaymentMethod(),
-                deliveryExpense.getCategory(),
-                user.getId());
+                deliveryExpense.getCategory());
 
     }
 
@@ -85,7 +84,7 @@ public class ExpenseServiceTest {
         when(repository.save(any(Expense.class))).thenReturn(deliveryExpense);
 
         //ACT
-        Expense result = service.recordExpense(deliveryExpenseDto);
+        Expense result = service.recordExpense(deliveryExpenseDto, user.getId());
 
         //ASSERT
         assertNotNull(result);

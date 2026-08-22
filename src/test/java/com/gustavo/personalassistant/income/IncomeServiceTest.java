@@ -64,8 +64,7 @@ public class IncomeServiceTest {
                 salary.getName(),
                 salary.getMoney(),
                 salary.getTransactionDate(),
-                salary.getCategory(),
-                user.getId()
+                salary.getCategory()
         );
     }
 
@@ -76,7 +75,7 @@ public class IncomeServiceTest {
         when(incomeRepository.save(any(Income.class))).thenReturn(salary);
 
         //ACT
-        Income result = incomeService.registerIncome(salaryIncomedto);
+        Income result = incomeService.registerIncome(salaryIncomedto, user.getId());
 
         //ASSERT
         assertNotNull(result);

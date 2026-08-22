@@ -6,11 +6,13 @@ import com.gustavo.personalassistant.dto.expenseDto.ExpenseUpdateDto;
 import com.gustavo.personalassistant.model.transactions.expense.Expense;
 import com.gustavo.personalassistant.model.transactions.expense.ExpenseCategories;
 import com.gustavo.personalassistant.model.transactions.expense.PaymentMethods;
+import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.service.ExpenseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -28,10 +30,11 @@ public class ExpenseController {
     public ResponseEntity<ExpenseResponseDto> recordExpense(
             @RequestBody @Valid ExpenseRecordDto expenseRecordDto,
             @RequestHeader(name = "Idempotency-Key", required = false) String idempotencyKey,
-            UriComponentsBuilder uriBuilder
+            UriComponentsBuilder uriBuilder,
+            @AuthenticationPrincipal User user
     ) {
 
-        Expense recordExpense = expenseService.recordExpense(expenseRecordDto);
+        Expense recordExpense = expenseService.recordExpense(expenseRecordDto, user.getId());
 
         ExpenseResponseDto expenseResponse = new ExpenseResponseDto(recordExpense);
 
@@ -42,27 +45,29 @@ public class ExpenseController {
         return ResponseEntity.created(location).body(expenseResponse);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/list")
     public ResponseEntity<List<ExpenseResponseDto>> listExpenses(
-            @PathVariable UUID userId,
             @RequestParam(name = "name", required = false) String expenseName,
             @RequestParam(name = "category", required = false) ExpenseCategories expenseCategory,
             @RequestParam(name = "payment-method", required = false) PaymentMethods paymentMethod,
             @RequestParam(required = false) String month,
             @RequestParam(required = false) Integer year,
-            @RequestParam(required = false) Integer day
+            @RequestParam(required = false) Integer day,
+            @AuthenticationPrincipal User user
     ) {
 
         List<ExpenseResponseDto> expenseList = expenseService.listDynamicExpenses(
-                userId, expenseName, expenseCategory, paymentMethod, month, year, day);
+                user.getId(), expenseName, expenseCategory, paymentMethod, month, year, day);
 
         return ResponseEntity.ok().body(expenseList);
 
     }
 
     @GetMapping("/{expenseId}")
-    public ResponseEntity<ExpenseResponseDto> findExpense(@PathVariable UUID expenseId) {
-        ExpenseResponseDto expenseDetails = expenseService.findExpense(expenseId);
+    public ResponseEntity<ExpenseResponseDto> findExpense(
+            @PathVariable UUID expenseId,
+            @AuthenticationPrincipal User user) {
+        ExpenseResponseDto expenseDetails = expenseService.findExpense(expenseId, user.getId());
 
         return ResponseEntity.ok(expenseDetails);
     }
@@ -70,16 +75,19 @@ public class ExpenseController {
     @PatchMapping("/{expenseId}")
     public ResponseEntity<ExpenseResponseDto> updateExpense(
             @PathVariable UUID expenseId,
-            @RequestBody @Valid ExpenseUpdateDto dto
+            @RequestBody @Valid ExpenseUpdateDto dto,
+            @AuthenticationPrincipal User user
             ){
 
-        return ResponseEntity.ok(expenseService.updateExpense(expenseId, dto));
+        return ResponseEntity.ok(expenseService.updateExpense(expenseId, dto, user.getId()));
 
     }
 
     @DeleteMapping("/delete/{expenseId}")
-    public ResponseEntity<Void> deleteExpense(@PathVariable UUID expenseId) {
-        expenseService.deleteExpense(expenseId);
+    public ResponseEntity<Void> deleteExpense(
+            @PathVariable UUID expenseId,
+            @AuthenticationPrincipal User user) {
+        expenseService.deleteExpense(expenseId, user.getId());
 
         return ResponseEntity.noContent().build();
     }
