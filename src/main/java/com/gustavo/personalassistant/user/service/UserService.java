@@ -3,6 +3,7 @@ package com.gustavo.personalassistant.user.service;
 import com.gustavo.personalassistant.user.dto.UserRegistrationDto;
 import com.gustavo.personalassistant.user.dto.UserSummaryDto;
 import com.gustavo.personalassistant.user.dto.UserUpdateDto;
+import com.gustavo.personalassistant.infra.exception.EmailAlreadyRegisteredException;
 import com.gustavo.personalassistant.infra.exception.NotFoundException;
 import com.gustavo.personalassistant.user.model.User;
 import com.gustavo.personalassistant.user.model.UserRoles;
@@ -27,7 +28,7 @@ public class UserService {
     @Transactional
     public UserSummaryDto userRegistration(UserRegistrationDto dto){
         if(userRepository.existsByEmail(dto.email())){
-            throw new IllegalArgumentException("This email address is already registered");
+            throw EmailAlreadyRegisteredException.emailAlreadyRegistered();
         }
 
         String hashedPassword = passwordEncoder.encode(dto.password());
