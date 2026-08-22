@@ -29,7 +29,6 @@ public class ExpenseController {
     @PostMapping
     public ResponseEntity<ExpenseResponseDto> recordExpense(
             @RequestBody @Valid ExpenseRecordDto expenseRecordDto,
-            @RequestHeader(name = "Idempotency-Key", required = false) String idempotencyKey,
             UriComponentsBuilder uriBuilder,
             @AuthenticationPrincipal User user
     ) {

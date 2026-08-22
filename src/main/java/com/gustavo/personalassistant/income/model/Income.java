@@ -13,7 +13,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "incomes")
-@AttributeOverride(name = "financeId", column = @Column(name = "income_id"))
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Income extends Finance {
     @Enumerated(EnumType.STRING)

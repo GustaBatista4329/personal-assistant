@@ -12,7 +12,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "expenses")
-@AttributeOverride(name = "financeId", column = @Column(name = "expense_id"))
 @Getter
 @Setter
 @NoArgsConstructor

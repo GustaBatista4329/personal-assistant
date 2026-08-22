@@ -27,7 +27,6 @@ public class IncomeController {
     @PostMapping
     public ResponseEntity<IncomeResponseDto> registerIncome(
             @RequestBody @Valid IncomeRegisterDto incomeRegisterDto,
-            @RequestHeader(name = "idempotency-key", required = false) String idempotencyKey,
             UriComponentsBuilder uriBuilder,
             @AuthenticationPrincipal User user
     ) {
