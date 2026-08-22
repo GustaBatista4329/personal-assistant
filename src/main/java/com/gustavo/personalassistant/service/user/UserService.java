@@ -1,13 +1,12 @@
-package com.gustavo.personalassistant.service;
+package com.gustavo.personalassistant.service.user;
 
 import com.gustavo.personalassistant.dto.userDto.UserRegistrationDto;
-import com.gustavo.personalassistant.dto.userDto.UserResponseDto;
+import com.gustavo.personalassistant.dto.userDto.UserSummaryDto;
 import com.gustavo.personalassistant.dto.userDto.UserUpdateDto;
 import com.gustavo.personalassistant.infra.exception.NotFoundException;
 import com.gustavo.personalassistant.model.user.User;
 import com.gustavo.personalassistant.model.user.UserRoles;
 import com.gustavo.personalassistant.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +25,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto userRegistration(UserRegistrationDto dto){
+    public UserSummaryDto userRegistration(UserRegistrationDto dto){
         if(userRepository.existsByEmail(dto.email())){
             throw new IllegalArgumentException("This email address is already registered");
         }
@@ -37,16 +36,16 @@ public class UserService {
         user.setRole(UserRoles.USER);
 
         userRepository.save(user);
-        return new UserResponseDto(user);
+        return new UserSummaryDto(user);
     }
 
     @Transactional
-    public UserResponseDto updateUser(UUID userId, UserUpdateDto dto){
+    public UserSummaryDto updateUser(UUID userId, UserUpdateDto dto){
         User user = userRepository.findById(userId)
                 .orElseThrow(NotFoundException::userNotFound);
 
         user.userUpdate(dto);
 
-        return new UserResponseDto(user);
+        return new UserSummaryDto(user);
     }
 }

@@ -5,7 +5,7 @@ import com.gustavo.personalassistant.model.user.User;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record UserResponseDto(
+public record UserSummaryDto(
         UUID userId,
         String name,
         String email,
@@ -13,7 +13,7 @@ public record UserResponseDto(
         String phoneNumber
 ) {
 
-    public UserResponseDto(User user){
+    public UserSummaryDto(User user){
         this(user.getId(), user.getName(), user.getEmail(), user.getBirthdate(), user.getPhoneNumber());
     }
 
