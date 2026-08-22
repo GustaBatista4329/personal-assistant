@@ -1,13 +1,13 @@
 package com.gustavo.personalassistant.expense;
 
-import com.gustavo.personalassistant.dto.expenseDto.ExpenseRecordDto;
-import com.gustavo.personalassistant.model.transactions.expense.Expense;
-import com.gustavo.personalassistant.model.transactions.expense.ExpenseCategories;
-import com.gustavo.personalassistant.model.transactions.expense.PaymentMethods;
-import com.gustavo.personalassistant.model.user.User;
-import com.gustavo.personalassistant.repository.UserRepository;
-import com.gustavo.personalassistant.repository.expense.ExpenseRepository;
-import com.gustavo.personalassistant.service.ExpenseService;
+import com.gustavo.personalassistant.expense.dto.ExpenseRecordDto;
+import com.gustavo.personalassistant.expense.model.Expense;
+import com.gustavo.personalassistant.expense.model.ExpenseCategories;
+import com.gustavo.personalassistant.expense.model.PaymentMethods;
+import com.gustavo.personalassistant.user.model.User;
+import com.gustavo.personalassistant.user.repository.UserRepository;
+import com.gustavo.personalassistant.expense.repository.ExpenseRepository;
+import com.gustavo.personalassistant.expense.service.ExpenseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.times;

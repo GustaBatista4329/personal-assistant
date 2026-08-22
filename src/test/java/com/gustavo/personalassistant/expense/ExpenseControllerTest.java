@@ -1,17 +1,15 @@
 package com.gustavo.personalassistant.expense;
 
-import com.gustavo.personalassistant.controller.ExpenseController;
-import com.gustavo.personalassistant.dto.expenseDto.ExpenseRecordDto;
-import com.gustavo.personalassistant.dto.expenseDto.ExpenseResponseDto;
-import com.gustavo.personalassistant.model.transactions.expense.Expense;
-import com.gustavo.personalassistant.model.transactions.expense.ExpenseCategories;
-import com.gustavo.personalassistant.model.transactions.expense.PaymentMethods;
-import com.gustavo.personalassistant.model.user.User;
-import com.gustavo.personalassistant.service.ExpenseService;
+import com.gustavo.personalassistant.expense.controller.ExpenseController;
+import com.gustavo.personalassistant.expense.dto.ExpenseResponseDto;
+import com.gustavo.personalassistant.expense.model.Expense;
+import com.gustavo.personalassistant.expense.model.ExpenseCategories;
+import com.gustavo.personalassistant.expense.model.PaymentMethods;
+import com.gustavo.personalassistant.user.model.User;
+import com.gustavo.personalassistant.expense.service.ExpenseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -24,7 +22,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

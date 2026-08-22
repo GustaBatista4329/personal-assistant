@@ -1,12 +1,12 @@
 package com.gustavo.personalassistant.income;
 
-import com.gustavo.personalassistant.controller.IncomeController;
-import com.gustavo.personalassistant.dto.IncomeDto.IncomeResponseDto;
+import com.gustavo.personalassistant.income.controller.IncomeController;
+import com.gustavo.personalassistant.income.dto.IncomeResponseDto;
 import com.gustavo.personalassistant.infra.exception.NotFoundException;
-import com.gustavo.personalassistant.model.transactions.income.Income;
-import com.gustavo.personalassistant.model.transactions.income.IncomeCategories;
-import com.gustavo.personalassistant.model.user.User;
-import com.gustavo.personalassistant.service.IncomeService;
+import com.gustavo.personalassistant.income.model.Income;
+import com.gustavo.personalassistant.income.model.IncomeCategories;
+import com.gustavo.personalassistant.user.model.User;
+import com.gustavo.personalassistant.income.service.IncomeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
